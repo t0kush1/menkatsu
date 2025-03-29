@@ -27,7 +27,7 @@ const dummyRecord: RamenRecord[] = [
 
 export default function Home() {
   return (
-    <main style={{ padding: "2rem" }}>
+    <main style={{ padding: '2rem' }}>
       <h1>🍜 menkatsu</h1>
       <h2>ラーメン記録一覧</h2>
 
