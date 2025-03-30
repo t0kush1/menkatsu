@@ -1,4 +1,4 @@
-import Ramencard from "@/components/Ramencard";
+import Ramencard from '@/components/Ramencard';
 
 type RamenRecord = {
   id: number;
@@ -11,17 +11,17 @@ type RamenRecord = {
 const dummyRecord: RamenRecord[] = [
   {
     id: 1,
-    shopName: "麺屋一燈",
-    visitDate: "2025-03-29",
+    shopName: '麺屋一燈',
+    visitDate: '2025-03-29',
     rating: 4,
-    comment: "魚介スープが絶品！",
+    comment: '魚介スープが絶品！',
   },
   {
     id: 2,
-    shopName: "ラーメン二郎　亀戸店",
-    visitDate: "2025-03-28",
+    shopName: 'ラーメン二郎　亀戸店',
+    visitDate: '2025-03-28',
     rating: 5,
-    comment: "ガッツリ最高！",
+    comment: 'ガッツリ最高！',
   },
 ];
 

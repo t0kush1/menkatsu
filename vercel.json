@@ -1,6 +1,5 @@
 {
-    "github": {
-      "deployPreviews": true
-    }
+  "github": {
+    "deployPreviews": true
   }
-  
+}

@@ -14,10 +14,10 @@ export default function RamenCard({ record }: RamenRecordProps) {
   return (
     <li
       style={{
-        marginBottom: "1.5rem",
-        border: "1px solid #ccc",
-        padding: "1rem",
-        borderRadius: "8px",
+        marginBottom: '1.5rem',
+        border: '1px solid #ccc',
+        padding: '1rem',
+        borderRadius: '8px',
       }}
     >
       <h3>{record.shopName}</h3>
