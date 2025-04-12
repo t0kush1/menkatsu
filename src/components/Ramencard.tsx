@@ -1,3 +1,6 @@
+import { StarRatingView } from './StarRatingView';
+import Link  from 'next/link';
+
 type RamenRecord = {
   id: number;
   shopName: string;
@@ -20,10 +23,14 @@ export default function RamenCard({ record }: RamenRecordProps) {
         borderRadius: '8px',
       }}
     >
-      <h3>{record.shopName}</h3>
-      <p>訪問日: {record.visitDate}</p>
-      <p>評価: {record.rating}</p>
-      <p>感想: {record.comment}</p>
+      <Link href={`/posts/${record.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <h3 className="text-2xl font-bold">{record.shopName}</h3>
+        <p>訪問日: {record.visitDate}</p>
+        <p>
+          総合評価: <StarRatingView value={record.rating} />
+        </p>
+        <p>感想: {record.comment}</p>
+      </Link>
     </li>
   );
 }

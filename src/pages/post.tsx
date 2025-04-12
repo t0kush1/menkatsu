@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { StarRating } from '@/components/StarRating';
+import { StarRatingInput } from '@/components/StarRatingInput';
 
 /**
  * @summary 本日の日付を取得する関数
@@ -152,7 +152,7 @@ export default function Post() {
           ].map(({ label, state, setter }) => (
             <div key={label}>
               <label className="block font-medium mb-1">{label}</label>
-              <StarRating value={state} onChange={setter} />
+              <StarRatingInput value={state} onChange={setter} />
             </div>
           ))}
         </div>

@@ -1,17 +1,17 @@
 import { JSX } from 'react';
 
-type StarRatingProps = {
+type StarRatingInputProps = {
   value: number; // 現在の評価（1〜5）
   onChange: (val: number) => void; // 星がクリックされたときの処理
 };
 
 /**
- * @summary 星評価コンポーネント
+ * @summary 星評価inputコンポーネント
  * @description 星をクリックして評価を選択するコンポーネント（1~5まで）
  * @param value 現在の評価（1〜5）
  * @param onChange 星がクリックされたときの処理
  */
-export const StarRating = ({ value, onChange }: StarRatingProps): JSX.Element => {
+export const StarRatingInput = ({ value, onChange }: StarRatingInputProps): JSX.Element => {
   return (
     <div className="flex space-x-1">
         {/* 1〜5までの星ボタンを作成していく */}
