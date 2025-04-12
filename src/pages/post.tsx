@@ -68,11 +68,13 @@ export default function Post() {
 
   return (
     <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-center">🍜 ラーメン記録を投稿</h2>
+      <h2 className="text-2xl font-bold mb-8 text-center text-gray-800 border-b-2 border-yellow-400 pb-2">
+        🍜 ラーメン記録を投稿
+      </h2>
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* 店名 */}
         <div>
-          <label className="block font-medium mb-1">店名</label>
+          <label className="block font-medium text-gray-600 mb-1">店名</label>
           <input
             type="text"
             value={shopName}
@@ -84,7 +86,7 @@ export default function Post() {
 
         {/* 訪問日 */}
         <div>
-          <label className="block font-medium mb-1">訪問日</label>
+          <label className="block font-medium text-gray-600 mb-1">訪問日</label>
           <input
             type="date"
             value={visitDate}
@@ -96,7 +98,7 @@ export default function Post() {
 
         {/* 種類 */}
         <div>
-          <label className="block font-medium mb-1">種類</label>
+          <label className="block font-medium text-gray-600 mb-1">種類</label>
           <select
             value={ramenType}
             onChange={(e) => setRamenType(e.target.value)}
@@ -117,7 +119,7 @@ export default function Post() {
         {/* ラーメンの種類が「その他」の場合のみここを表示 */}
         {isOtherSelected && (
           <div className="mt-3">
-            <label className="block font-medium mb-1">種類（自由入力）</label>
+            <label className="block font-medium text-gray-600 mb-1">種類（自由入力）</label>
             <input
               type="text"
               value={customRamenType}
@@ -131,7 +133,7 @@ export default function Post() {
 
         {/* 価格 */}
         <div>
-          <label className="block font-medium mb-1">価格</label>
+          <label className="block font-medium text-gray-600 mb-1">価格</label>
           <input
             type="number"
             value={price}
@@ -151,14 +153,14 @@ export default function Post() {
             { label: '総合評価', state: overallRating, setter: setOverallRating },
           ].map(({ label, state, setter }) => (
             <div key={label}>
-              <label className="block font-medium mb-1">{label}</label>
+              <label className="block font-medium text-gray-600 mb-1">{label}</label>
               <StarRatingInput value={state} onChange={setter} />
             </div>
           ))}
         </div>
 
         <div>
-          <label className="block font-medium mb-1">コメント</label>
+          <label className="block font-medium text-gray-600 mb-1">コメント</label>
           <textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
