@@ -48,44 +48,65 @@ export default function PostDetail() {
     }
 
     return (
-      <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded-xl shadow-md space-y-4">
-        <h2 className="text-2xl font-bold text-center">🍜 {record.shopName}</h2>
-        {/* <p>
-          <strong>店名：</strong>
+      <div className="max-w-xl mx-auto mt-12 p-8 bg-white rounded-2xl shadow-md border border-gray-200">
+        {/* タイトル（店名） */}
+        <h2 className="text-center text-2xl font-semibold mb-6 text-gray-800 border-b-2 border-yellow-400 pb-2">
           {record.shopName}
-        </p> */}
-        <p>
-          <strong>訪問日：</strong>
-          {record.visitDate}
-        </p>
-        <p>
-          <strong>種類：</strong>
-          {record.ramenType}
-        </p>
-        <p>
-          <strong>価格：</strong>
-          {record.price} 円
-        </p>
-        <p>
-          <strong>味：</strong>
-          <StarRatingView value={record.tasteRating}/>
-        </p>
-        <p>
-          <strong>価格：</strong>
-          <StarRatingView value={record.costRating}/>
-        </p>
-        <p>
-          <strong>接客：</strong>
-          <StarRatingView value={record.serviceRating}/>
-        </p>
-        <p>
-          <strong>総合評価：</strong>
-          <StarRatingView value={record.overallRating}/>
-        </p>
-        <p>
-          <strong>コメント：</strong>
-          {record.comment}
-        </p>
+        </h2>
+
+        {/* 内容リスト */}
+        <dl className="space-y-4 text-sm text-gray-700">
+          <div>
+            <dt className="text-lg font-medium text-gray-600">訪問日</dt>
+            <dd className="ml-4 mt-2">{record.visitDate}</dd>
+          </div>
+
+          <div>
+            <dt className="text-lg font-medium text-gray-600">種類</dt>
+            <dd className="ml-4 mt-2">{record.ramenType}</dd>
+          </div>
+
+          <div>
+            <dt className="text-lg font-medium text-gray-600">価格</dt>
+            <dd className="ml-4 mt-2">{record.price} 円</dd>
+          </div>
+
+          <div>
+            <dt className="text-lg font-medium text-gray-600">味</dt>
+            <dd className="ml-4 mt-2">
+              <StarRatingView value={record.tasteRating} />
+            </dd>
+          </div>
+
+          <div>
+            <dt className="text-lg font-medium text-gray-600">コスパ</dt>
+            <dd className="ml-4 mt-2">
+              <StarRatingView value={record.costRating} />
+            </dd>
+          </div>
+
+          <div>
+            <dt className="text-lg font-medium text-gray-600">接客</dt>
+            <dd className="ml-4 mt-2">
+              <StarRatingView value={record.serviceRating} />
+            </dd>
+          </div>
+
+          <div>
+            <dt className="text-lg font-medium text-gray-600">総合評価</dt>
+            <dd className="ml-4 mt-2">
+              <StarRatingView value={record.overallRating} />
+            </dd>
+          </div>
+        </dl>
+
+        {/* コメント */}
+        <div className="mt-6 pt-4 border-t text-sm text-gray-700">
+          <h3 className="text-lg font-medium text-gray-600 mb-2">コメント</h3>
+          <p className="leading-relaxed whitespace-pre-line ml-4 mt-2">
+            {record.comment || '（コメントなし）'}
+          </p>
+        </div>
       </div>
     );
 }
