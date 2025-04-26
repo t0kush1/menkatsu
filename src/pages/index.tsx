@@ -1,5 +1,9 @@
 import Ramencard from '@/components/Ramencard';
+import { supabase } from '@/lib/supabase';
+import { useEffect, useState } from 'react';
 
+// キャメルケース
+// オブジェクト命名規則に従う形でキャメルケースに変換する関数
 type RamenRecord = {
   id: number;
   shopName: string;
@@ -8,24 +12,51 @@ type RamenRecord = {
   comment: string;
 };
 
-const dummyRecord: RamenRecord[] = [
-  {
-    id: 1,
-    shopName: '麺屋玄洋',
-    visitDate: '2025-03-29',
-    rating: 5,
-    comment: '貝出汁スープが絶品！',
-  },
-  {
-    id: 2,
-    shopName: 'ラーメン二郎 亀戸店',
-    visitDate: '2025-03-28',
-    rating: 3,
-    comment: 'ガッツリ最高！',
-  },
-];
+// スネークケース
+// DBから取得時のカラム名に合わせて設定
+type RamenPostDB = {
+  id: number;
+  shop_name: string;
+  visit_date: string;
+  overall_rating: number;
+  comment: string;
+};
+
+function camelCaseRecord(recordFromDB: RamenPostDB): RamenRecord {
+  return {
+    id: recordFromDB.id,
+    shopName: recordFromDB.shop_name,
+    visitDate: recordFromDB.visit_date,
+    rating: recordFromDB.overall_rating,
+    comment: recordFromDB.comment,
+  }
+}
 
 export default function Home() {
+  const [posts, setPosts] = useState<RamenRecord[]>([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const { data, error } = await supabase.from('ramen_posts').select('*').order('created_at', { ascending: false });
+      if (error) {
+        console.error('Error fetching posts:', error);
+      } else {
+        setPosts(data);
+      }
+
+      if (error) {
+        console.error(error);
+      } else {
+        const convertData = data?.map(camelCaseRecord) ?? [];
+
+        setPosts(convertData || []);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+
   return (
     <main style={{ padding: '2rem', backgroundColor: '#f9f9f9', minHeight: '100vh' }}>
       <h1 style={{ display: 'flex', alignItems: 'center', fontSize: '2rem', gap: '1rem' }}>
@@ -46,7 +77,7 @@ export default function Home() {
       </h2>
 
       <ul style={{ padding: 0 }}>
-        {dummyRecord.map((record) => (
+        {posts.map((record) => (
           <Ramencard key={record.id} record={record} />
           // keyはmapの時など、要素を一意に識別するためのIDを付与するのが一般的
           // Reactで .map() を使うたびに key を付けるのは“お作法”みたいなもので、React使いの基本中の基本スキル

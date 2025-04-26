@@ -1,6 +1,7 @@
 'use client'
 
 import { StarRatingView } from '@/components/StarRatingView';
+import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 
@@ -17,30 +18,63 @@ type RamenRecord = {
     comment: string;
 }
 
+type RamenPostDB = {
+  id: number;
+  shop_name: string;
+  visit_date: string;
+  ramen_type: string;
+  price: number;
+  taste_rating: number;
+  cost_rating: number;
+  service_rating: number;
+  overall_rating: number;
+  comment: string;
+}
+
+function camelCaseRecord(recordFromDB: RamenPostDB): RamenRecord {
+  return {
+    id: recordFromDB.id,
+    shopName: recordFromDB.shop_name,
+    visitDate: recordFromDB.visit_date,
+    ramenType: recordFromDB.ramen_type,
+    price: recordFromDB.price,
+    tasteRating: recordFromDB.taste_rating,
+    costRating: recordFromDB.cost_rating,
+    serviceRating: recordFromDB.service_rating,
+    overallRating: recordFromDB.overall_rating,
+    comment: recordFromDB.comment,
+  }
+}
+
 export default function PostDetail() {
     const router = useRouter();
     const { id } = router.query;
     const [record, setRecord] = useState<RamenRecord | null>(null);
     
+    // 依存関数はid
+    // idが変わる度にデータを1件取得する
     useEffect(() => {
         if (!id) {
             return
         }
-        // APIからデータを取得する処理（今回はダミーデータを表示）
-        const dummyData: RamenRecord = {
-            id: Number(id),
-            shopName: '麺屋玄洋',
-            visitDate: '2023-10-01',
-            ramenType: '塩',
-            price: 800,
-            tasteRating: 5,
-            costRating: 4,
-            serviceRating: 5,
-            overallRating: 4,
-            comment: '美味しかった！',
-        };
-        // 取得したデータをstateにセット
-        setRecord(dummyData);
+        // APIからデータを取得する処理
+        const fetchData = async () => {
+          const { data, error } = await supabase
+            .from('ramen_posts')
+            .select('*')
+            .eq('id', id)
+            .single<RamenPostDB>();
+
+          if (error) {
+            console.log(error);
+          } else {
+            // 取得したデータをstateにセット
+            setRecord(camelCaseRecord(data));
+          }
+        }
+
+        // 呼出し
+        fetchData();
     }, [id]);
 
     if (!record) {
