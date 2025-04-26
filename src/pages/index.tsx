@@ -2,6 +2,8 @@ import Ramencard from '@/components/Ramencard';
 import { supabase } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 
+// キャメルケース
+// オブジェクト命名規則に従う形でキャメルケースに変換する関数
 type RamenRecord = {
   id: number;
   shopName: string;
@@ -10,6 +12,8 @@ type RamenRecord = {
   comment: string;
 };
 
+// スネークケース
+// DBから取得時のカラム名に合わせて設定
 type RamenPostDB = {
   id: number;
   shop_name: string;
