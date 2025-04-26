@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { StarRatingInput } from '@/components/StarRatingInput';
+import { supabase } from '@/lib/supabase';
+import { useRouter } from 'next/router';
 
 /**
  * @summary 本日の日付を取得する関数
@@ -41,19 +43,57 @@ export default function Post() {
   // ラーメンの種類が「その他」の場合は、カスタムラーメンの種類を表示
   const isOtherSelected = ramenType === 'その他';
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log({
-      shopName,
-      visitDate,
-      ramenType: isOtherSelected ? customRamenType : ramenType,
-      price, 
-      tasteRating,
-      costRating,
-      serviceRating,
-      overallRating,
-      comment,
-    });
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      console.log({
+        shopName,
+        visitDate,
+        ramenType: isOtherSelected ? customRamenType : ramenType,
+        price, 
+        tasteRating,
+        costRating,
+        serviceRating,
+        overallRating,
+        comment,
+      });
+
+      // Supabaseからユーザ情報の取得処理
+      // ユーザ機能未開発につきコメントアウト
+      // const {
+      //   data: { user },
+      //   error: userError,
+      // } = await supabase.auth.getUser();
+
+      // if (!user || userError) {
+      //   alert('ログインが必要です');
+      //   return;
+      // }
+
+      const { error } = await supabase.from('ramen_posts').insert([
+        {
+          user_id: '00000000-0000-0000-0000-000000000000', // ユーザ機能未開発につき仮のUUIDを使用
+          shop_name: shopName,
+          visit_date: visitDate,
+          ramen_type: isOtherSelected ? customRamenType : ramenType,
+          price: Number(price),
+          taste_rating: tasteRating,
+          cost_rating: costRating,
+          service_rating: serviceRating,
+          overall_rating: overallRating,
+          comment,
+        },
+      ]);
+
+      if (error) {
+        console.error('Error inserting data:', error);
+        alert('データの保存に失敗しました');
+        return;
+      } else {
+        alert('投稿が完了しました');
+        router.push('/');
+      }
 
     setShopName('');
     setVisitDate('');
