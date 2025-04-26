@@ -10,7 +10,15 @@ type RamenRecord = {
   comment: string;
 };
 
-function camelCaseRecord(recordFromDB: any): RamenRecord {
+type RamenPostDB = {
+  id: number;
+  shop_name: string;
+  visit_date: string;
+  overall_rating: number;
+  comment: string;
+};
+
+function camelCaseRecord(recordFromDB: RamenPostDB): RamenRecord {
   return {
     id: recordFromDB.id,
     shopName: recordFromDB.shop_name,

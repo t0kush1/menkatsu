@@ -18,7 +18,20 @@ type RamenRecord = {
     comment: string;
 }
 
-function camelCaseRecord(recordFromDB: any): RamenRecord {
+type RamenPostDB = {
+  id: number;
+  shop_name: string;
+  visit_date: string;
+  ramen_type: string;
+  price: number;
+  taste_rating: number;
+  cost_rating: number;
+  service_rating: number;
+  overall_rating: number;
+  comment: string;
+}
+
+function camelCaseRecord(recordFromDB: RamenPostDB): RamenRecord {
   return {
     id: recordFromDB.id,
     shopName: recordFromDB.shop_name,
@@ -46,10 +59,11 @@ export default function PostDetail() {
         }
         // APIからデータを取得する処理
         const fetchData = async () => {
-          const { data, error } = await supabase.from('ramen_posts')
+          const { data, error } = await supabase
+            .from('ramen_posts')
             .select('*')
             .eq('id', id)
-            .single();
+            .single<RamenPostDB>();
 
           if (error) {
             console.log(error);
