@@ -17,6 +17,7 @@ type RamenRecord = {
   serviceRating: number;
   overallRating: number;
   comment: string;
+  imageUrl: string | null;
 };
 
 type RamenPostDB = {
@@ -30,6 +31,7 @@ type RamenPostDB = {
   service_rating: number;
   overall_rating: number;
   comment: string;
+  image_url: string | null;
 };
 
 function camelCaseRecord(recordFromDB: RamenPostDB): RamenRecord {
@@ -44,6 +46,7 @@ function camelCaseRecord(recordFromDB: RamenPostDB): RamenRecord {
     serviceRating: recordFromDB.service_rating,
     overallRating: recordFromDB.overall_rating,
     comment: recordFromDB.comment,
+    imageUrl: recordFromDB.image_url,
   };
 }
 
@@ -173,6 +176,18 @@ export default function PostDetail() {
             {record.comment || '（コメントなし）'}
           </p>
         </div>
+
+        {/* 画像 */}
+        {record.imageUrl && (
+          <div className="mt-6 pt-4 border-t text-sm text-gray-700">
+            <h3 className="text-lg font-medium text-gray-600 mb-2">画像</h3>
+            <img
+              src={record.imageUrl}
+              alt="ラーメンの画像"
+              className="w-full h-auto rounded-md shadow-md"
+            />
+          </div>
+        )}
 
         <div className="flex justify-center gap-4 mt-8">
           <button
