@@ -81,15 +81,6 @@ export default function EditPost() {
   // 画像削除モーダルの表示状態
   const [showImageDeleteModal, setShowImageDeleteModal] = useState(false);
 
-  // 画像削除モーダルの表示状態を更新する関数
-  const openShowImageDeleteModal = () => {
-    setShowImageDeleteModal(true);
-  }
-
-  const closeShowImageDeleteModal = () => {
-    setShowImageDeleteModal(false);
-  }
-
   // ラーメンの種類が「その他」の場合は、カスタムラーメンの種類を表示
   const isOtherSelected = ramenType === 'その他';
 

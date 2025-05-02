@@ -91,7 +91,7 @@ export default function Post() {
         const compressedFile = await (await import('browser-image-compression')).default(file, options);
         const fileName = `${Date.now()}_${compressedFile.name}`;
 
-        const { data, error: uploadError } = await supabase.storage
+        const { error: uploadError } = await supabase.storage
           .from('ramen-images')  // あなたが作ったバケット名
           .upload(fileName, compressedFile);
 
