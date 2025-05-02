@@ -19,7 +19,7 @@ const getTodayDate = (): string => {
 };
 
 export default function Post() {
-  // 店名  
+  // 店名
   const [shopName, setShopName] = useState('');
   // 訪問日
   const [visitDate, setVisitDate] = useState(getTodayDate());
@@ -40,61 +40,102 @@ export default function Post() {
   const [overallRating, setOverallRating] = useState(3);
   // コメント
   const [comment, setComment] = useState('');
+  // 写真ファイル
+  const [file, setFile] = useState<File | null>(null);
+  // プレビュー表示用のURL
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   // ラーメンの種類が「その他」の場合は、カスタムラーメンの種類を表示
   const isOtherSelected = ramenType === 'その他';
 
   const router = useRouter();
 
+  // 保存ボタン押下時の処理
   const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
-      console.log({
-        shopName,
-        visitDate,
-        ramenType: isOtherSelected ? customRamenType : ramenType,
-        price, 
-        tasteRating,
-        costRating,
-        serviceRating,
-        overallRating,
-        comment,
-      });
+    e.preventDefault();
+    console.log({
+      shopName,
+      visitDate,
+      ramenType: isOtherSelected ? customRamenType : ramenType,
+      price,
+      tasteRating,
+      costRating,
+      serviceRating,
+      overallRating,
+      comment,
+      file,
+    });
 
-      // Supabaseからユーザ情報の取得処理
-      // ユーザ機能未開発につきコメントアウト
-      // const {
-      //   data: { user },
-      //   error: userError,
-      // } = await supabase.auth.getUser();
+    // Supabaseからユーザ情報の取得処理
+    // ユーザ機能未開発につきコメントアウト
+    // const {
+    //   data: { user },
+    //   error: userError,
+    // } = await supabase.auth.getUser();
 
-      // if (!user || userError) {
-      //   alert('ログインが必要です');
-      //   return;
-      // }
+    // if (!user || userError) {
+    //   alert('ログインが必要です');
+    //   return;
+    // }
 
-      const { error } = await supabase.from('ramen_posts').insert([
-        {
-          user_id: '00000000-0000-0000-0000-000000000000', // ユーザ機能未開発につき仮のUUIDを使用
-          shop_name: shopName,
-          visit_date: visitDate,
-          ramen_type: isOtherSelected ? customRamenType : ramenType,
-          price: Number(price),
-          taste_rating: tasteRating,
-          cost_rating: costRating,
-          service_rating: serviceRating,
-          overall_rating: overallRating,
-          comment,
-        },
-      ]);
+    let imageUrl: string | null = null;
 
-      if (error) {
-        console.error('Error inserting data:', error);
-        alert('データの保存に失敗しました');
-        return;
-      } else {
-        alert('投稿が完了しました');
-        router.push('/');
+    try {
+      if (file) {
+        const options = {
+          maxSizeMB: 0.3,
+          maxWidthOrHeight: 1024,
+          useWebWorker: true,
+        }
+
+        const compressedFile = await (await import('browser-image-compression')).default(file, options);
+        const fileName = `${Date.now()}_${compressedFile.name}`;
+
+        const { data, error: uploadError } = await supabase.storage
+          .from('ramen-images')  // あなたが作ったバケット名
+          .upload(fileName, compressedFile);
+
+        if (uploadError) {
+          throw new Error(uploadError.message);
+        }
+
+        const { data: publicData } = supabase.storage
+          .from('ramen-images')
+          .getPublicUrl(fileName);
+
+        imageUrl = publicData.publicUrl;
       }
+    } catch (err) {
+      console.error('画像アップロードエラー:', err);
+      alert('画像のアップロードに失敗しました');
+      return;
+    }
+
+
+    const { error } = await supabase.from('ramen_posts').insert([
+      {
+        user_id: '00000000-0000-0000-0000-000000000000', // ユーザ機能未開発につき仮のUUIDを使用
+        shop_name: shopName,
+        visit_date: visitDate,
+        ramen_type: isOtherSelected ? customRamenType : ramenType,
+        price: Number(price),
+        taste_rating: tasteRating,
+        cost_rating: costRating,
+        service_rating: serviceRating,
+        overall_rating: overallRating,
+        comment,
+        image_url: imageUrl,
+      },
+    ]);
+
+    if (error) {
+      console.error('Error inserting data:', error);
+      alert('データの保存に失敗しました');
+      return;
+    } else {
+      alert('投稿が完了しました');
+      router.push('/');
+    }
 
     setShopName('');
     setVisitDate('');
@@ -105,11 +146,25 @@ export default function Post() {
     setServiceRating(3);
     setOverallRating(3);
     setComment('');
+    setFile(null);
   };
 
   const handleTop = () => {
     router.push('/');
   };
+
+  // 画像のプレビュー表示を行う
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    // ブラウザで表示できるURLの生成
+    const objectUrl = URL.createObjectURL(file);
+    setPreviewUrl(objectUrl);
+  }
+
 
   return (
     <Layout>
@@ -205,6 +260,7 @@ export default function Post() {
             ))}
           </div>
 
+          {/* コメント */}
           <div>
             <label className="block font-medium text-gray-600 mb-1">コメント</label>
             <textarea
@@ -214,6 +270,39 @@ export default function Post() {
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 resize-none"
             ></textarea>
           </div>
+
+          {/* 写真（任意） */}
+          <div>
+            <label className="block font-medium text-gray-600 mb-1">写真（任意）</label>
+            <div className="bg-red-50 border border-red-300 text-red-700 text-sm rounded-md p-3 mb-4">
+              <ul className="list-disc list-inside space-y-1">
+                <li>写真は1枚のみ投稿可能です</li>
+                <li>投稿後、写真の変更はできません</li>
+              </ul>
+            </div>
+            <p></p>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                if (e.target.files && e.target.files.length > 0) {
+                  setFile(e.target.files[0]);
+                  handleFileChange(e);
+                }
+              }}
+            />
+            {previewUrl && (
+              <div className="mt-6 pt-4 border-t text-sm text-gray-700">
+                <img
+                  src={previewUrl}
+                  alt="プレビュー"
+                  className="w-full h-auto rounded-md shadow-md"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* 投稿ボタン */}
 
           <div className="flex justify-center gap-4 mt-8">
             <button

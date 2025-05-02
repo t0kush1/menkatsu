@@ -15,6 +15,7 @@ type RamenRecord = {
   serviceRating: number;
   overallRating: number;
   comment: string;
+  imageUrl: string | null;
 };
 
 type RamenPostDB = {
@@ -28,6 +29,7 @@ type RamenPostDB = {
   service_rating: number;
   overall_rating: number;
   comment: string;
+  image_url: string | null;
 };
 
 function camelCaseRecord(recordFromDB: RamenPostDB): RamenRecord {
@@ -42,6 +44,7 @@ function camelCaseRecord(recordFromDB: RamenPostDB): RamenRecord {
     serviceRating: recordFromDB.service_rating,
     overallRating: recordFromDB.overall_rating,
     comment: recordFromDB.comment,
+    imageUrl: recordFromDB.image_url,
   };
 }
 
@@ -72,6 +75,20 @@ export default function EditPost() {
   const [overallRating, setOverallRating] = useState(3);
   // コメント
   const [comment, setComment] = useState('');
+  // 画像
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  // 画像削除モーダルの表示状態
+  const [showImageDeleteModal, setShowImageDeleteModal] = useState(false);
+
+  // 画像削除モーダルの表示状態を更新する関数
+  const openShowImageDeleteModal = () => {
+    setShowImageDeleteModal(true);
+  }
+
+  const closeShowImageDeleteModal = () => {
+    setShowImageDeleteModal(false);
+  }
 
   // ラーメンの種類が「その他」の場合は、カスタムラーメンの種類を表示
   const isOtherSelected = ramenType === 'その他';
@@ -113,6 +130,7 @@ export default function EditPost() {
         setServiceRating(convertedData.serviceRating);
         setOverallRating(convertedData.overallRating);
         setComment(convertedData.comment);
+        setImageUrl(convertedData.imageUrl);
       }
     };
 
@@ -120,7 +138,7 @@ export default function EditPost() {
     fetchPost();
 
     return () => {
-      isMounted = false; // ⭐ クリーンアップでフラグを落とす
+      isMounted = false; // クリーンアップでフラグを落とす
     };
   }, [id]);
 
@@ -163,6 +181,42 @@ export default function EditPost() {
     router.push(`/posts/${id}`);
   };
 
+  // 「画像を削除」押下時の処理
+  const handleImageDelete = async () => {
+    if (!id) {
+      return;
+    }
+
+    const filePath = imageUrl?.split('/').pop(); // ファイル名のみ抽出
+
+    // supabaseのストレージから画像を削除
+    const {error: storageDeleteError} = await supabase.storage
+      .from('ramen-images')
+      .remove([filePath!]);
+
+    if (storageDeleteError) {
+      console.error('ストレージ削除失敗:', storageDeleteError.message);
+      alert('ストレージ削除に失敗しました');
+      return;
+    }
+
+    // ストレージも削除
+    const {error: updateError} = await supabase
+      .from('ramen_posts')
+      .update({ image_url: null })
+      .eq('id', id);
+    
+    if (updateError) {
+      console.error('DB更新失敗:', updateError.message);
+      alert('DB更新に失敗しました');
+      return;
+    }
+
+    alert('画像を削除しました');
+    setImageUrl(null);
+
+  }
+
   if (!record) {
     return <div>読み込み中...</div>;
   }
@@ -174,6 +228,7 @@ export default function EditPost() {
         <h2 className="text-2xl font-bold mb-8 text-center text-gray-800 border-b-2 border-yellow-400 pb-2">
           投稿の編集
         </h2>
+
         {/* 店名 */}
         <div style={{ marginBottom: '1rem' }}>
           <label className="block font-medium text-gray-600 mb-1">店名:</label>
@@ -258,9 +313,10 @@ export default function EditPost() {
             </div>
           ))}
         </div>
+
         {/*　コメント */}
         <div style={{ marginBottom: '1rem' }}>
-          <label className="block font-medium text-gray-600 mb-1">コメント:</label>
+          <label className="block font-medium text-gray-600 mb-1">コメント</label>
           <textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
@@ -268,6 +324,57 @@ export default function EditPost() {
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 resize-none"
           />
         </div>
+
+        {/* 画像（削除のみ可能） */}
+        {imageUrl && (
+          <div className="mt-6 pt-4 border-t text-sm text-gray-700">
+            <h3 className="text-lg font-medium text-gray-600 mb-2">画像</h3>
+            <img
+              src={imageUrl}
+              alt="投稿されたラーメンの画像"
+              className="w-full h-auto rounded-md shadow-md"
+            />
+            <button
+              onClick={() => setShowImageDeleteModal(true)}
+              className="mt-2 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg"
+            >
+              画像を削除
+            </button>
+          </div>
+        )}
+
+        {/* 画像削除モーダル */}
+        {showImageDeleteModal && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            onClick={() => setShowImageDeleteModal(false)}
+          >
+            <div
+              className="bg-white p-6 rounded-xl shadow-xl w-80 text-center"
+              onClick={(e) => e.stopPropagation()} // モーダル内クリックで閉じないように
+            >
+              <p className="mb-4 text-gray-800 font-semibold">本当に画像を削除しますか？<br />
+              ※この処理は取り消すことができません</p>
+              <div className="flex justify-center gap-4">
+                <button
+                  onClick={() => {
+                    setShowImageDeleteModal(false);
+                    handleImageDelete(); // 実際の削除処理を呼び出す
+                  }}
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+                >
+                  削除する
+                </button>
+                <button
+                  onClick={() => setShowImageDeleteModal(false)}
+                  className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+                >
+                  キャンセル
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="flex justify-center gap-4 mt-8">
           <button
