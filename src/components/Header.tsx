@@ -1,9 +1,13 @@
 import Link from 'next/link';
 import { useState } from 'react';
+import { useUser } from '@/contexts/UserContext';
 
 export default function Header() {
   // ハンバーガメニューの状態を管理するstate
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // ユーザ情報
+  const user = useUser();
 
   // ハンバーガーメニュー押下時モーダルオープン
   const openModal = () => {
@@ -40,6 +44,13 @@ export default function Header() {
           <button className="text-white text-base font-semibold hover:underline">ログアウト</button>
         </div>
       </div>
+
+      {/* ユーザ情報 */}
+      {user && (
+        <p className="text-white text-sm font-semibold">
+          ようこそ、{user.nickname}さん！
+        </p>
+      )}
 
       {/* モーダル（ハンバーガー押したら出現） */}
       {isModalOpen && (
