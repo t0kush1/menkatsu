@@ -1,16 +1,9 @@
+import { ShortRamenRecord } from '@/types/ramen-record';
 import { StarRatingView } from './StarRatingView';
 import Link  from 'next/link';
 
-type RamenRecord = {
-  id: number;
-  shopName: string;
-  visitDate: string;
-  rating: number; // 1~5
-  comment: string;
-};
-
 type RamenRecordProps = {
-  record: RamenRecord;
+  record: ShortRamenRecord;
 };
 
 export default function RamenCard({ record }: RamenRecordProps) {

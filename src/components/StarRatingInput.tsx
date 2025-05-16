@@ -1,9 +1,5 @@
+import { StarRatingInputProps } from '@/types/star-rating';
 import { JSX } from 'react';
-
-type StarRatingInputProps = {
-  value: number; // 現在の評価（1〜5）
-  onChange: (val: number) => void; // 星がクリックされたときの処理
-};
 
 /**
  * @summary 星評価inputコンポーネント
