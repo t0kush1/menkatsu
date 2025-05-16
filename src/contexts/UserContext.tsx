@@ -1,10 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { supabase } from '@/lib/supabase';
-
-type UserProfile = {
-  id: string;
-  nickname: string;
-} | null;
+import { UserProfile } from '@/types/user';
 
 const UserContext = createContext<UserProfile>(null);
 export const useUser = () => useContext(UserContext);

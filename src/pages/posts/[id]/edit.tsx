@@ -1,38 +1,11 @@
 import Layout from '@/components/Layout';
 import { StarRatingInput } from '@/components/StarRatingInput';
 import { supabase } from '@/lib/supabase';
+import { FullRamenRecord, FullRamenPostDB } from '@/types/ramen-record';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-type RamenRecord = {
-  id: number;
-  shopName: string;
-  visitDate: string;
-  ramenType: string;
-  price: number;
-  tasteRating: number;
-  costRating: number;
-  serviceRating: number;
-  overallRating: number;
-  comment: string;
-  imageUrl: string | null;
-};
-
-type RamenPostDB = {
-  id: number;
-  shop_name: string;
-  visit_date: string;
-  ramen_type: string;
-  price: number;
-  taste_rating: number;
-  cost_rating: number;
-  service_rating: number;
-  overall_rating: number;
-  comment: string;
-  image_url: string | null;
-};
-
-function camelCaseRecord(recordFromDB: RamenPostDB): RamenRecord {
+function camelCaseRecord(recordFromDB: FullRamenPostDB): FullRamenRecord {
   return {
     id: recordFromDB.id,
     shopName: recordFromDB.shop_name,
@@ -51,7 +24,7 @@ function camelCaseRecord(recordFromDB: RamenPostDB): RamenRecord {
 export default function EditPost() {
   const router = useRouter();
   const { id } = router.query;
-  const [record, SetRecord] = useState<RamenRecord | null>(null);
+  const [record, SetRecord] = useState<FullRamenRecord | null>(null);
 
   // 入力用のstateを用意
   // 店名

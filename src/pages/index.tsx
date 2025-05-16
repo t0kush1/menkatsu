@@ -1,29 +1,11 @@
 import Layout from '@/components/Layout';
 import Ramencard from '@/components/Ramencard';
 import { supabase } from '@/lib/supabase';
+import { ShortRamenPostDB, ShortRamenRecord } from '@/types/ramen-record';
 import { useEffect, useState } from 'react';
 
-// キャメルケース
-// オブジェクト命名規則に従う形でキャメルケースに変換する関数
-type RamenRecord = {
-  id: number;
-  shopName: string;
-  visitDate: string;
-  rating: number; // 1~5
-  comment: string;
-};
 
-// スネークケース
-// DBから取得時のカラム名に合わせて設定
-type RamenPostDB = {
-  id: number;
-  shop_name: string;
-  visit_date: string;
-  overall_rating: number;
-  comment: string;
-};
-
-function camelCaseRecord(recordFromDB: RamenPostDB): RamenRecord {
+function camelCaseRecord(recordFromDB: ShortRamenPostDB): ShortRamenRecord {
   return {
     id: recordFromDB.id,
     shopName: recordFromDB.shop_name,
@@ -34,7 +16,7 @@ function camelCaseRecord(recordFromDB: RamenPostDB): RamenRecord {
 }
 
 export default function Home() {
-  const [posts, setPosts] = useState<RamenRecord[]>([]);
+  const [posts, setPosts] = useState<ShortRamenRecord[]>([]);
 
   useEffect(() => {
     const fetchPosts = async () => {

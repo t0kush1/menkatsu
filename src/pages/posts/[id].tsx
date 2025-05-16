@@ -3,38 +3,11 @@
 import Layout from '@/components/Layout';
 import { StarRatingView } from '@/components/StarRatingView';
 import { supabase } from '@/lib/supabase';
+import { FullRamenRecord, FullRamenPostDB } from '@/types/ramen-record';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 
-type RamenRecord = {
-  id: number;
-  shopName: string;
-  visitDate: string;
-  ramenType: string;
-  price: number;
-  tasteRating: number;
-  costRating: number;
-  serviceRating: number;
-  overallRating: number;
-  comment: string;
-  imageUrl: string | null;
-};
-
-type RamenPostDB = {
-  id: number;
-  shop_name: string;
-  visit_date: string;
-  ramen_type: string;
-  price: number;
-  taste_rating: number;
-  cost_rating: number;
-  service_rating: number;
-  overall_rating: number;
-  comment: string;
-  image_url: string | null;
-};
-
-function camelCaseRecord(recordFromDB: RamenPostDB): RamenRecord {
+function camelCaseRecord(recordFromDB: FullRamenPostDB): FullRamenRecord {
   return {
     id: recordFromDB.id,
     shopName: recordFromDB.shop_name,
@@ -53,7 +26,7 @@ function camelCaseRecord(recordFromDB: RamenPostDB): RamenRecord {
 export default function PostDetail() {
   const router = useRouter();
   const { id } = router.query;
-  const [record, setRecord] = useState<RamenRecord | null>(null);
+  const [record, setRecord] = useState<FullRamenRecord | null>(null);
 
   // 依存関数はid
   // idが変わる度にデータを1件取得する
@@ -67,7 +40,7 @@ export default function PostDetail() {
         .from('ramen_posts')
         .select('*')
         .eq('id', id)
-        .single<RamenPostDB>();
+        .single<FullRamenPostDB>();
 
       if (error) {
         console.log(error);
