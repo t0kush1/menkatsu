@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '@/lib/supabase';
+import Layout from '@/components/Layout';
 
 const validatedNickName = (nickName: string): boolean => {
   const trimmed = nickName.trim();
@@ -84,50 +85,52 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-20 p-6 bg-white rounded-xl shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">ユーザー登録</h2>
-      <form onSubmit={handleSignUp} className="space-y-4">
-        <div>
-          <label className="block font-medium text-gray-700 mb-1">ニックネーム</label>
-          <input
-            type="text"
-            value={nickName}
-            onChange={(e) => setNickName(e.target.value)}
-            maxLength={10}
-            required
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            placeholder="例: ラーメン太郎"
-          />
-        </div>
-        <div>
-          <label className="block font-medium text-gray-700 mb-1">メールアドレス</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
-          />
-        </div>
-        <div>
-          <label className="block font-medium text-gray-700 mb-1">パスワード</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={6}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
-          />
-        </div>
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-md disabled:opacity-50"
-        >
-          {loading ? '登録中...' : '登録する'}
-        </button>
-      </form>
-    </div>
+    <Layout>
+      <div className="max-w-md mx-auto mt-20 p-6 bg-white rounded-xl shadow-md">
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">ユーザー登録</h2>
+        <form onSubmit={handleSignUp} className="space-y-4">
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">ニックネーム</label>
+            <input
+              type="text"
+              value={nickName}
+              onChange={(e) => setNickName(e.target.value)}
+              maxLength={10}
+              required
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              placeholder="例: ラーメン太郎"
+            />
+          </div>
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">メールアドレス</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            />
+          </div>
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">パスワード</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-md disabled:opacity-50"
+          >
+            {loading ? '登録中...' : '登録する'}
+          </button>
+        </form>
+      </div>
+    </Layout>
   );
 }

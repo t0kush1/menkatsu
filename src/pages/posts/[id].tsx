@@ -2,6 +2,7 @@
 
 import Layout from '@/components/Layout';
 import { StarRatingView } from '@/components/StarRatingView';
+import { withAuth } from '@/hoc/withAuth';
 import { supabase } from '@/lib/supabase';
 import { FullRamenRecord, FullRamenPostDB } from '@/types/ramen-record';
 import { useRouter } from 'next/router';
@@ -23,7 +24,7 @@ function camelCaseRecord(recordFromDB: FullRamenPostDB): FullRamenRecord {
   };
 }
 
-export default function PostDetail() {
+export const PostDetail = () => {
   const router = useRouter();
   const { id } = router.query;
   const [record, setRecord] = useState<FullRamenRecord | null>(null);
@@ -189,4 +190,4 @@ export default function PostDetail() {
   );
 }
 
-
+export default withAuth(PostDetail);
