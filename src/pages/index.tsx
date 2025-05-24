@@ -1,5 +1,6 @@
 import Layout from '@/components/Layout';
 import Ramencard from '@/components/Ramencard';
+import { withAuth } from '@/hoc/withAuth';
 import { supabase } from '@/lib/supabase';
 import { ShortRamenPostDB, ShortRamenRecord } from '@/types/ramen-record';
 import { useEffect, useState } from 'react';
@@ -15,7 +16,7 @@ function camelCaseRecord(recordFromDB: ShortRamenPostDB): ShortRamenRecord {
   }
 }
 
-export default function Home() {
+export const Home = () => {
   const [posts, setPosts] = useState<ShortRamenRecord[]>([]);
 
   useEffect(() => {
@@ -72,3 +73,5 @@ export default function Home() {
     </Layout>
   );
 }
+
+export default withAuth(Home);

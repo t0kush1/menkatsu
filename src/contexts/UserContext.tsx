@@ -2,16 +2,27 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { supabase } from '@/lib/supabase';
 import { UserProfile } from '@/types/user';
 
-const UserContext = createContext<UserProfile>(null);
+type userContextType = {
+  user: UserProfile,
+  isLoading: boolean,
+}
+
+const UserContext = createContext<userContextType>({
+  user: null,
+  isLoading: true,
+});
+
 export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [userProfile, setUserProfile] = useState<UserProfile>(null);
+  const [user, setUser] = useState<UserProfile>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchUser = async () => {
+    setIsLoading(true);
     const { data: authData, error: authError } = await supabase.auth.getUser();
     if (authError || !authData.user) {
-      setUserProfile(null);
+      setUser(null);
       return;
     }
 
@@ -22,10 +33,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       .single();
 
     if (profileData && !profileError) {
-      setUserProfile(profileData);
+      setUser(profileData);
     } else {
-      setUserProfile(null);
+      setUser(null);
     }
+
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -41,6 +54,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
-  return <UserContext.Provider value={userProfile}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{user, isLoading}}>{children}</UserContext.Provider>;
 };
 

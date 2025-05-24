@@ -12,7 +12,7 @@ export default function Header() {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   // ユーザ情報
-  const user = useUser();
+  const {user} = useUser();
 
   // ルーターを使用してページ遷移を管理
   const router = useRouter();
@@ -50,24 +50,32 @@ export default function Header() {
   return (
     <header className="bg-yellow-400 p-4 shadow-md">
       <div className="flex items-center justify-between">
-        {/* ロゴ画像（トップページへ遷移） */}
-        <Link href="/" className="text-2xl font-bold text-white">
+        {/* ロゴ画像（ログイン時のみトップページへ遷移） */}
+        {user ? (
+          <Link href="/" className="text-2xl font-bold text-white">
+            <img src="/menkatsulogo.png" alt="menkatsu logo" style={{ height: '70px' }} />
+          </Link>
+        ) : (
           <img src="/menkatsulogo.png" alt="menkatsu logo" style={{ height: '70px' }} />
-        </Link>
+        )}
 
         {/* ハンバーガーアイコン（モバイル用） */}
-        <div className="md:hidden flex flex-col items-end text-right">
-          {/* ユーザー名表示を上部に追加 */}
-          {user && (
-            <p className="text-white text-sm font-semibold pb-2">ようこそ、{user.nickname}さん！</p>
-          )}
-          <button onClick={openModal} className="text-white focus:outline-none">
-            {/* ハンバーガーアイコンを作成（線3本） */}
-            <div className="w-6 h-1 bg-white mb-1"></div>
-            <div className="w-6 h-1 bg-white mb-1"></div>
-            <div className="w-6 h-1 bg-white"></div>
-          </button>
-        </div>
+        {user && (
+          <div className="md:hidden flex flex-col items-end text-right">
+            {/* ユーザー名表示を上部に追加 */}
+            {user && (
+              <p className="text-white text-sm font-semibold pb-2">
+                ようこそ、{user.nickname}さん！
+              </p>
+            )}
+            <button onClick={openModal} className="text-white focus:outline-none">
+              {/* ハンバーガーアイコンを作成（線3本） */}
+              <div className="w-6 h-1 bg-white mb-1"></div>
+              <div className="w-6 h-1 bg-white mb-1"></div>
+              <div className="w-6 h-1 bg-white"></div>
+            </button>
+          </div>
+        )}
 
         {/* PCサイズ時のメニュー */}
         <div className="hidden md:flex flex-col items-end space-y-1 text-right">
@@ -77,15 +85,19 @@ export default function Header() {
           )}
 
           <div className="flex space-x-4">
-            <Link href="/post" className="text-white text-base font-semibold hover:underline">
-              投稿する
-            </Link>
-            <button
-              onClick={openLogoutModal}
-              className="text-white text-base font-semibold hover:underline"
-            >
-              ログアウト
-            </button>
+            {user && (
+              <Link href="/post" className="text-white text-base font-semibold hover:underline">
+                投稿する
+              </Link>
+            )}
+            {user && (
+              <button
+                onClick={openLogoutModal}
+                className="text-white text-base font-semibold hover:underline"
+              >
+                ログアウト
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -93,7 +105,7 @@ export default function Header() {
       {/* ユーザ情報
       {user && <p className="text-white text-sm font-semibold">ようこそ、{user.nickname}さん！</p>} */}
       {/* モーダル（ハンバーガー押したら出現） */}
-      {isModalOpen && (
+      {isModalOpen && user && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
           onClick={closeModal}

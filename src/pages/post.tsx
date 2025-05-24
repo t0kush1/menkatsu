@@ -5,6 +5,7 @@ import { StarRatingInput } from '@/components/StarRatingInput';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/router';
 import Layout from '@/components/Layout';
+import { withAuth } from '@/hoc/withAuth';
 
 /**
  * @summary 本日の日付を取得する関数
@@ -18,7 +19,7 @@ const getTodayDate = (): string => {
   return `${year}-${month}-${day}`;
 };
 
-export default function Post() {
+export const PostPage = () => {
   // 店名
   const [shopName, setShopName] = useState('');
   // 訪問日
@@ -323,3 +324,5 @@ export default function Post() {
     </Layout>
   );
 }
+
+export default withAuth(PostPage);
