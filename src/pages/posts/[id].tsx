@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase';
 import { FullRamenRecord, FullRamenPostDB } from '@/types/ramen-record';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 function camelCaseRecord(recordFromDB: FullRamenPostDB): FullRamenRecord {
   return {
@@ -28,6 +29,7 @@ export const PostDetail = () => {
   const router = useRouter();
   const { id } = router.query;
   const [record, setRecord] = useState<FullRamenRecord | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   // 依存関数はid
   // idが変わる度にデータを1件取得する
@@ -64,22 +66,27 @@ export const PostDetail = () => {
     router.push(`/posts/${id}/edit`);
   };
 
+  // 削除確認ダイアログの表示
+  const openDeleteModal = () => {
+    setIsDeleteModalOpen(true);
+  }
+
   // 「削除」ボタン押下時の処理
   const handleDelete = async () => {
     // 削除確認ダイアログの表示
-    const comnfirmDelete = window.confirm('本当に削除してよろしいですか？');
-    if (!comnfirmDelete) {
-      return;
-    }
+    // const comnfirmDelete = window.confirm('本当に削除してよろしいですか？');
+    // if (!comnfirmDelete) {
+    //   return;
+    // }
 
     // 削除処理
     const { error } = await supabase.from('ramen_posts').delete().eq('id', id);
 
     if (error) {
       console.error('d削除エラー', error);
-      alert('削除に失敗しました');
+      toast.error('削除に失敗しました');
     } else {
-      alert('削除しました');
+      toast.success('削除しました');
       router.push('/');
     }
   };
@@ -172,7 +179,7 @@ export const PostDetail = () => {
           </button>
 
           <button
-            onClick={handleDelete}
+            onClick={openDeleteModal}
             className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg"
           >
             削除
@@ -186,6 +193,38 @@ export const PostDetail = () => {
           </button>
         </div>
       </div>
+
+      {/* 削除確認ダイアログ */}
+      {isDeleteModalOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          onClick={() => setIsDeleteModalOpen(false)}
+        >
+          <div
+            className="bg-white p-6 rounded-xl shadow-xl w-80 text-center"
+            onClick={(e) => e.stopPropagation()} // モーダル内クリックで閉じないように
+          >
+            <p className="mb-4 text-gray-800 font-semibold">削除してよろしいですか？</p>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => {
+                  setIsDeleteModalOpen(false);
+                  handleDelete(); // 実際の削除処理を呼び出す
+                }}
+                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+              >
+                削除
+              </button>
+              <button
+                onClick={() => setIsDeleteModalOpen(false)}
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+              >
+                キャンセル
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 }

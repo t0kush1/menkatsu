@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '@/lib/supabase';
 import Layout from '@/components/Layout';
+import { toast } from 'react-toastify';
 
 const validatedNickName = (nickName: string): boolean => {
   const trimmed = nickName.trim();
@@ -15,6 +16,8 @@ export default function SignUpPage() {
   const [password, setPassword] = useState('');
   const [nickName, setNickName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [nicknameError, setNicknameError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const router = useRouter();
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -24,13 +27,13 @@ export default function SignUpPage() {
 
     // ニックネームのバリデーションチェック
     if (!validatedNickName(trimmedNickName)) {
-      alert('ニックネームはスペース・記号なしで10文字以内で入力して下さい。');
+      setNicknameError('ニックネームはスペース・記号なしで10文字以内で入力して下さい。');
       return;
     }
 
     // パスワードのバリデーションチェック
     if (password.length < 6) {
-      alert('パスワードは6文字以上で入力して下さい。');
+      setPasswordError('パスワードは6文字以上で入力して下さい。');
       return;
     }
 
@@ -42,14 +45,14 @@ export default function SignUpPage() {
     });
 
     if (error) {
-      alert(`サインアップに失敗しました: ${error.message}`);
+      toast.error(`サインアップに失敗しました: ${error.message}`);
       console.error(error);
     }
 
     // 一度データを取得
     const { data: userData, error: userError } = await supabase.auth.getUser();
     if (userError || !userData?.user) {
-      alert(`ユーザ情報の取得に失敗しました: ${userError?.message}`);
+      toast.error(`ユーザ情報の取得に失敗しました: ${userError?.message}`);
       console.error(userError);
       setLoading(false);
       return;
@@ -70,17 +73,17 @@ export default function SignUpPage() {
       setLoading(false);
 
       if (error) {
-        alert(`プロフィールの作成に失敗しました: ${error.message}`);
+        toast.error(`プロフィールの作成に失敗しました: ${error.message}`);
         console.error(error);
         setLoading(false);
         return;
       } else {
-        alert('登録が成功しました！ログインしてください。');
+        toast.success('登録が成功しました！ログインしてください。');
       }
       router.push('/login');
     } else {
       setLoading(false);
-      alert('ユーザIDの取得に失敗しました。');
+      toast.error('ユーザIDの取得に失敗しました。');
     }
   };
 
@@ -101,6 +104,13 @@ export default function SignUpPage() {
               placeholder="例: ラーメン太郎"
             />
           </div>
+
+          {nicknameError && (
+            <p className="text-red-500 text-sm">
+              {nicknameError}
+            </p>
+          )}
+
           <div>
             <label className="block font-medium text-gray-700 mb-1">メールアドレス</label>
             <input
@@ -122,6 +132,13 @@ export default function SignUpPage() {
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
             />
           </div>
+
+          {passwordError && (
+            <p className="text-red-500 text-sm">
+              {passwordError}
+            </p>
+          )}
+          
           <button
             type="submit"
             disabled={loading}
