@@ -26,13 +26,12 @@ export default function LoginPage() {
     setLoading(false);
 
     if (error) {
-      setErrorMessage('ログインに失敗しました：' + error.message);
+      setErrorMessage('エラーメッセージセット');
       setLoading(false);
       return;
     }
 
-    // 成功時：トップページなどへ遷移
-    alert('ログインしました！');
+    // 成功時→トップページへ遷移
     setLoading(false);
     router.push('/');
   };
@@ -65,7 +64,12 @@ export default function LoginPage() {
             />
           </div>
 
-          {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+          {errorMessage && (
+            <p className="text-red-500 text-sm">
+              ログインに失敗しました。<br />
+              メールアドレス、またはパスワードを確認してください。
+            </p>
+          )}
 
           <button
             type="submit"

@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { FullRamenRecord, FullRamenPostDB } from '@/types/ramen-record';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 function camelCaseRecord(recordFromDB: FullRamenPostDB): FullRamenRecord {
   return {
@@ -130,10 +131,10 @@ export const EditPost = () => {
 
     if (error) {
       console.error('更新エラー', error);
-      alert('更新に失敗しました。');
+      toast.error('更新に失敗しました。');
     } else {
       console.log('更新成功');
-      alert('更新に成功しました。');
+      toast.success('更新に成功しました。');
       router.push(`/posts/${id}`);
     }
   };
@@ -161,7 +162,7 @@ export const EditPost = () => {
 
     if (storageDeleteError) {
       console.error('ストレージ削除失敗:', storageDeleteError.message);
-      alert('ストレージ削除に失敗しました');
+      toast.error('ストレージ削除に失敗しました');
       return;
     }
 
@@ -173,11 +174,11 @@ export const EditPost = () => {
     
     if (updateError) {
       console.error('DB更新失敗:', updateError.message);
-      alert('DB更新に失敗しました');
+      toast.error('DB更新に失敗しました');
       return;
     }
 
-    alert('画像を削除しました');
+    toast.success('画像を削除しました');
     setImageUrl(null);
 
   }

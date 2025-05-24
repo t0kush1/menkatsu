@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/router';
 import Layout from '@/components/Layout';
 import { withAuth } from '@/hoc/withAuth';
+import { toast } from 'react-toastify';
 
 /**
  * @summary 本日の日付を取得する関数
@@ -45,6 +46,8 @@ export const PostPage = () => {
   const [file, setFile] = useState<File | null>(null);
   // プレビュー表示用のURL
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  // 画像アップロード要エラーメッセージ
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   // ラーメンの種類が「その他」の場合は、カスタムラーメンの種類を表示
   const isOtherSelected = ramenType === 'その他';
@@ -108,7 +111,7 @@ export const PostPage = () => {
       }
     } catch (err) {
       console.error('画像アップロードエラー:', err);
-      alert('画像のアップロードに失敗しました');
+      setUploadError('画像のアップロードに失敗しました');
       return;
     }
 
@@ -131,10 +134,10 @@ export const PostPage = () => {
 
     if (error) {
       console.error('Error inserting data:', error);
-      alert('データの保存に失敗しました');
+      toast.error('データの保存に失敗しました');
       return;
     } else {
-      alert('投稿が完了しました');
+      toast.success('投稿が完了しました！');
       router.push('/');
     }
 
@@ -292,6 +295,11 @@ export const PostPage = () => {
                 }
               }}
             />
+
+            {/* アップロードエラー */}
+            {uploadError && <p className="text-red-500 text-sm mt-2">{uploadError}</p>}
+
+            {/* プレビュー表示 */}
             {previewUrl && (
               <div className="mt-6 pt-4 border-t text-sm text-gray-700">
                 <img
