@@ -3,8 +3,8 @@ declare module 'next-pwa' {
         dest: string;
         register?: boolean;
         skipWaiting?: boolean;
-        [key: string]: any; // 他のオプションも許可
+        [key: string]: unknown; // 他のオプションも許可
     }
 
-    export default function nextPWA(options: PWAOptions): (nextConfig: any) => any;
+    export default function nextPWA(options: PWAOptions): (nextConfig: unknown) => unknown;
 }
