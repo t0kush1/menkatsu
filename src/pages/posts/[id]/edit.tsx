@@ -189,11 +189,11 @@ export const EditPost = () => {
 
   return (
     <Layout>
-      <h1 className="text-3xl font-bold text-center mt-10 mb-6">ラーメン投稿編集</h1>
+      <h1 className="text-3xl font-bold text-center mt-8 mb-8 text-white bg-yellow-400 rounded-md px-4 py-2 shadow-md">
+        ラーメン投稿編集
+      </h1>
       <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-md">
-        <h2 className="text-2xl font-bold mb-8 text-center text-gray-800 border-b-2 border-yellow-400 pb-2">
-          投稿の編集
-        </h2>
+        <h2 className="text-2xl font-bold mb-8 text-center">投稿の編集</h2>
 
         {/* 店名 */}
         <div style={{ marginBottom: '1rem' }}>
@@ -319,8 +319,11 @@ export const EditPost = () => {
               className="bg-white p-6 rounded-xl shadow-xl w-80 text-center"
               onClick={(e) => e.stopPropagation()} // モーダル内クリックで閉じないように
             >
-              <p className="mb-4 text-gray-800 font-semibold">本当に画像を削除しますか？<br />
-              ※この処理は取り消すことができません</p>
+              <p className="mb-4 text-gray-800 font-semibold">
+                本当に画像を削除しますか？
+                <br />
+                ※この処理は取り消すことができません
+              </p>
               <div className="flex justify-center gap-4">
                 <button
                   onClick={() => {

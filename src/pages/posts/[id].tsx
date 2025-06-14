@@ -100,7 +100,7 @@ export const PostDetail = () => {
     <Layout>
       <div className="max-w-xl mx-auto mt-12 p-8 bg-white rounded-2xl shadow-md border border-gray-200">
         {/* タイトル（店名） */}
-        <h2 className="text-center text-2xl font-semibold mb-6 text-gray-800 border-b-2 border-yellow-400 pb-2">
+        <h2 className="text-center text-2xl font-semibold mb-6 text-gray-700 border-b-2 border-yellow-400 pb-2">
           {record.shopName}
         </h2>
 

@@ -48,17 +48,7 @@ export const Home = () => {
         {/* <h1 style={{ display: 'flex', alignItems: 'center', fontSize: '2rem', gap: '1rem' }}>
           <img src="/menkatsulogo.png" alt="menkatsu logo" style={{ height: '70px' }} />
         </h1> */}
-        <h2
-          style={{
-            marginTop: '2rem',
-            marginBottom: '2rem',
-            fontSize: '1.8rem',
-            fontWeight: 'bold',
-            borderBottom: '2px solid #FFCC00', // 赤系の下線
-            paddingBottom: '0.5rem',
-            color: '#333',
-          }}
-        >
+        <h2 className="mt-8 mb-8 text-3xl text-center font-bold text-white bg-yellow-400 rounded-md px-4 py-2 shadow-md">
           ラーメン記録一覧
         </h2>
 
