@@ -1,9 +1,15 @@
 import type { NextConfig } from 'next';
-;
+import nextPWA from 'next-pwa';
 
-const nextConfig: NextConfig = {
-  /* config options here */
+// Next.js設定を定義
+const baseConfig: NextConfig = {
   reactStrictMode: true,
 };
 
-export default nextConfig;
+// PWA設定を追加
+export default nextPWA({
+  dest: 'public', 
+  register: true,
+  skipWaiting: true,
+})(baseConfig);
+
