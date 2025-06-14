@@ -5,7 +5,7 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <link rel="manifest" href="/manifest.json" />
-        <link rel="icon" href="/icons/icon-192.png" />
+        <link rel="icon" href="/icons/menkatsulogo_192.png" />
         <meta name="theme-color" content="#facc15" />
       </Head>
       <body className="antialiased">
