@@ -13,6 +13,7 @@ function camelCaseRecord(recordFromDB: ShortRamenPostDB): ShortRamenRecord {
     visitDate: recordFromDB.visit_date,
     rating: recordFromDB.overall_rating,
     comment: recordFromDB.comment,
+    imageUrl: recordFromDB.image_url,
   }
 }
 

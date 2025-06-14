@@ -7,6 +7,7 @@ export type ShortRamenRecord = {
   visitDate: string;
   rating: number; // 1~5
   comment: string;
+  imageUrl: string | null;
 };
 
 /**
@@ -52,5 +53,6 @@ export type ShortRamenPostDB = {
   visit_date: string;
   overall_rating: number;
   comment: string;
+  image_url: string | null;
 };
 
