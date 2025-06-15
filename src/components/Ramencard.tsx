@@ -17,7 +17,7 @@ export default function RamenCard({ record }: RamenRecordProps) {
       }}
     >
       <Link href={`/posts/${record.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-        <h3 className="text-2xl font-bold">{record.shopName}</h3>
+        <h3 className="text-2xl font-bold text-gray-700">{record.shopName}</h3>
         {/* 画像 */}
         {record.imageUrl && (
           <div className="mt-6 pt-4 border-t text-sm text-gray-700">
@@ -28,11 +28,13 @@ export default function RamenCard({ record }: RamenRecordProps) {
             />
           </div>
         )}
-        <p>訪問日: {record.visitDate}</p>
-        <p>
+        <p className="mt-2 text-sm text-gray-500 font-semibold">訪問日: {record.visitDate}</p>
+        <p className="text-sm text-gray-500 font-semibold">
           総合評価: <StarRatingView value={record.rating} />
         </p>
-        <p>感想: {record.comment}</p>
+        <p className="mt-2 text-sm text-gray-500 whitespace-pre-wrap font-semibold">
+          感想: {record.comment}
+        </p>
       </Link>
     </li>
   );

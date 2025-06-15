@@ -3,6 +3,7 @@ import Ramencard from '@/components/Ramencard';
 import { withAuth } from '@/hoc/withAuth';
 import { supabase } from '@/lib/supabase';
 import { ShortRamenPostDB, ShortRamenRecord } from '@/types/ramen-record';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 
@@ -19,6 +20,7 @@ function camelCaseRecord(recordFromDB: ShortRamenPostDB): ShortRamenRecord {
 
 export const Home = () => {
   const [posts, setPosts] = useState<ShortRamenRecord[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -40,7 +42,10 @@ export const Home = () => {
 
     fetchPosts();
   }, []);
-
+  
+  const handlePost = () => {
+    router.push('/post')
+  }
 
   return (
     <Layout>
@@ -48,17 +53,7 @@ export const Home = () => {
         {/* <h1 style={{ display: 'flex', alignItems: 'center', fontSize: '2rem', gap: '1rem' }}>
           <img src="/menkatsulogo.png" alt="menkatsu logo" style={{ height: '70px' }} />
         </h1> */}
-        <h2
-          style={{
-            marginTop: '2rem',
-            marginBottom: '2rem',
-            fontSize: '1.8rem',
-            fontWeight: 'bold',
-            borderBottom: '2px solid #FFCC00', // 赤系の下線
-            paddingBottom: '0.5rem',
-            color: '#333',
-          }}
-        >
+        <h2 className="mt-8 mb-8 text-3xl text-center font-bold text-white bg-yellow-400 rounded-md px-4 py-2 shadow-md">
           ラーメン記録一覧
         </h2>
 
@@ -70,6 +65,9 @@ export const Home = () => {
             // ちなみにindexの付与は順番が変わるとバグが起きたりするので非推奨
           ))}
         </ul>
+        <button onClick={handlePost} className="fixed bottom-4 right-4 bg-yellow-400 text-white rounded-full p-4 shadow-lg hover:bg-yellow-500 transition">
+          ＋ 投稿
+        </button>
       </main>
     </Layout>
   );
