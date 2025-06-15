@@ -64,7 +64,7 @@ export default function Header() {
           <div className="md:hidden flex flex-col items-end text-right">
             {/* ユーザー名表示を上部に追加 */}
             {user && (
-              <p className="text-white text-sm font-semibold pb-2">
+              <p className="text-white text-sm font-semibold pb-4">
                 ようこそ、{user.nickname}さん！
               </p>
             )}

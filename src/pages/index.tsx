@@ -3,6 +3,7 @@ import Ramencard from '@/components/Ramencard';
 import { withAuth } from '@/hoc/withAuth';
 import { supabase } from '@/lib/supabase';
 import { ShortRamenPostDB, ShortRamenRecord } from '@/types/ramen-record';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 
@@ -19,6 +20,7 @@ function camelCaseRecord(recordFromDB: ShortRamenPostDB): ShortRamenRecord {
 
 export const Home = () => {
   const [posts, setPosts] = useState<ShortRamenRecord[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -40,7 +42,10 @@ export const Home = () => {
 
     fetchPosts();
   }, []);
-
+  
+  const handlePost = () => {
+    router.push('/post')
+  }
 
   return (
     <Layout>
@@ -60,6 +65,9 @@ export const Home = () => {
             // ちなみにindexの付与は順番が変わるとバグが起きたりするので非推奨
           ))}
         </ul>
+        <button onClick={handlePost} className="fixed bottom-4 right-4 bg-yellow-400 text-white rounded-full p-4 shadow-lg hover:bg-yellow-500 transition">
+          ＋ 投稿
+        </button>
       </main>
     </Layout>
   );
