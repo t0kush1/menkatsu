@@ -132,9 +132,7 @@ export default function Header() {
             </Link>
 
             <button
-              onClick={() => {
-                /* ログアウト処理 */ closeModal();
-              }}
+              onClick={openLogoutModal}
               className="w-full text-center bg-gray-400 hover:bg-gray-500 text-white font-bold py-3 rounded-lg transition-colors"
             >
               ログアウト

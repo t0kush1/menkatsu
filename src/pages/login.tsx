@@ -38,54 +38,56 @@ export default function LoginPage() {
 
   return (
     <Layout>
-      <div className="max-w-md mx-auto mt-20 p-6 bg-white rounded-xl shadow-md">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">ログイン</h2>
+      <div style={{ padding: '1rem', backgroundColor: '#f9f9f9', minHeight: '100vh' }}>
+        <div className="max-w-md mx-auto mt-20 p-6 bg-white rounded-xl shadow-md">
+          <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">ログイン</h2>
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="block font-medium text-gray-700 mb-1">メールアドレス</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            />
-          </div>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label className="block font-medium text-gray-700 mb-1">メールアドレス</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              />
+            </div>
 
-          <div>
-            <label className="block font-medium text-gray-700 mb-1">パスワード</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            />
-          </div>
+            <div>
+              <label className="block font-medium text-gray-700 mb-1">パスワード</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              />
+            </div>
 
-          {errorMessage && (
-            <p className="text-red-500 text-sm">
-              ログインに失敗しました。<br />
-              メールアドレス、またはパスワードを確認してください。
-            </p>
-          )}
+            {errorMessage && (
+              <p className="text-red-500 text-sm">
+                ログインに失敗しました。<br />
+                メールアドレス、またはパスワードを確認してください。
+              </p>
+            )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-md disabled:opacity-50"
-          >
-            {loading ? 'ログイン中...' : 'ログイン'}
-          </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-md disabled:opacity-50"
+            >
+              {loading ? 'ログイン中...' : 'ログイン'}
+            </button>
 
-          {/* 🔽 ここに追加 */}
-          <div className="text-right text-sm mt-2">
-            <Link href="/signup" className="text-blue-500 hover:underline text-base">
-              ユーザー登録はこちら
-            </Link>
-          </div>
-        </form>
+            {/* 🔽 ここに追加 */}
+            <div className="text-right text-sm mt-2">
+              <Link href="/signup" className="text-blue-500 hover:underline text-base">
+                ユーザー登録はこちら
+              </Link>
+            </div>
+          </form>
+        </div>
       </div>
     </Layout>
   );
