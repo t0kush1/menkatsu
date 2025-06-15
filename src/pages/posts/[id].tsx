@@ -98,99 +98,101 @@ export const PostDetail = () => {
 
   return (
     <Layout>
-      <div className="max-w-xl mx-auto mt-12 p-8 bg-white rounded-2xl shadow-md border border-gray-200">
-        {/* タイトル（店名） */}
-        <h2 className="text-center text-2xl font-semibold mb-6 text-gray-700 border-b-2 border-yellow-400 pb-2">
-          {record.shopName}
-        </h2>
+      <div style={{ padding: '1rem', backgroundColor: '#f9f9f9', minHeight: '100vh' }}>
+        <div className="max-w-xl mx-auto mt-12 p-8 bg-white rounded-2xl shadow-md border border-gray-200">
+          {/* タイトル（店名） */}
+          <h2 className="text-center text-2xl font-semibold mb-6 text-gray-700 border-b-2 border-yellow-400 pb-2">
+            {record.shopName}
+          </h2>
 
-        {/* 内容リスト */}
-        <dl className="space-y-4 text-sm text-gray-700">
-          <div>
-            <dt className="text-lg font-medium text-gray-600">訪問日</dt>
-            <dd className="ml-4 mt-2">{record.visitDate}</dd>
-          </div>
+          {/* 内容リスト */}
+          <dl className="space-y-4 text-sm text-gray-700">
+            <div>
+              <dt className="text-lg font-medium text-gray-600">訪問日</dt>
+              <dd className="ml-4 mt-2">{record.visitDate}</dd>
+            </div>
 
-          <div>
-            <dt className="text-lg font-medium text-gray-600">種類</dt>
-            <dd className="ml-4 mt-2">{record.ramenType}</dd>
-          </div>
+            <div>
+              <dt className="text-lg font-medium text-gray-600">種類</dt>
+              <dd className="ml-4 mt-2">{record.ramenType}</dd>
+            </div>
 
-          <div>
-            <dt className="text-lg font-medium text-gray-600">価格</dt>
-            <dd className="ml-4 mt-2">{record.price} 円</dd>
-          </div>
+            <div>
+              <dt className="text-lg font-medium text-gray-600">価格</dt>
+              <dd className="ml-4 mt-2">{record.price} 円</dd>
+            </div>
 
-          <div>
-            <dt className="text-lg font-medium text-gray-600">味</dt>
-            <dd className="ml-4 mt-2">
-              <StarRatingView value={record.tasteRating} />
-            </dd>
-          </div>
+            <div>
+              <dt className="text-lg font-medium text-gray-600">味</dt>
+              <dd className="ml-4 mt-2">
+                <StarRatingView value={record.tasteRating} />
+              </dd>
+            </div>
 
-          <div>
-            <dt className="text-lg font-medium text-gray-600">コスパ</dt>
-            <dd className="ml-4 mt-2">
-              <StarRatingView value={record.costRating} />
-            </dd>
-          </div>
+            <div>
+              <dt className="text-lg font-medium text-gray-600">コスパ</dt>
+              <dd className="ml-4 mt-2">
+                <StarRatingView value={record.costRating} />
+              </dd>
+            </div>
 
-          <div>
-            <dt className="text-lg font-medium text-gray-600">接客</dt>
-            <dd className="ml-4 mt-2">
-              <StarRatingView value={record.serviceRating} />
-            </dd>
-          </div>
+            <div>
+              <dt className="text-lg font-medium text-gray-600">接客</dt>
+              <dd className="ml-4 mt-2">
+                <StarRatingView value={record.serviceRating} />
+              </dd>
+            </div>
 
-          <div>
-            <dt className="text-lg font-medium text-gray-600">総合評価</dt>
-            <dd className="ml-4 mt-2">
-              <StarRatingView value={record.overallRating} />
-            </dd>
-          </div>
-        </dl>
+            <div>
+              <dt className="text-lg font-medium text-gray-600">総合評価</dt>
+              <dd className="ml-4 mt-2">
+                <StarRatingView value={record.overallRating} />
+              </dd>
+            </div>
+          </dl>
 
-        {/* コメント */}
-        <div className="mt-6 pt-4 border-t text-sm text-gray-700">
-          <h3 className="text-lg font-medium text-gray-600 mb-2">コメント</h3>
-          <p className="leading-relaxed whitespace-pre-line ml-4 mt-2">
-            {record.comment || '（コメントなし）'}
-          </p>
-        </div>
-
-        {/* 画像 */}
-        {record.imageUrl && (
+          {/* コメント */}
           <div className="mt-6 pt-4 border-t text-sm text-gray-700">
-            <h3 className="text-lg font-medium text-gray-600 mb-2">画像</h3>
-            <img
-              src={record.imageUrl}
-              alt="ラーメンの画像"
-              className="w-full h-auto rounded-md shadow-md"
-            />
+            <h3 className="text-lg font-medium text-gray-600 mb-2">コメント</h3>
+            <p className="leading-relaxed whitespace-pre-line ml-4 mt-2">
+              {record.comment || '（コメントなし）'}
+            </p>
           </div>
-        )}
 
-        <div className="flex justify-center gap-4 mt-8">
-          <button
-            onClick={handleEdit}
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg"
-          >
-            編集
-          </button>
+          {/* 画像 */}
+          {record.imageUrl && (
+            <div className="mt-6 pt-4 border-t text-sm text-gray-700">
+              <h3 className="text-lg font-medium text-gray-600 mb-2">画像</h3>
+              <img
+                src={record.imageUrl}
+                alt="ラーメンの画像"
+                className="w-full h-auto rounded-md shadow-md"
+              />
+            </div>
+          )}
 
-          <button
-            onClick={openDeleteModal}
-            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg"
-          >
-            削除
-          </button>
+          <div className="flex justify-center gap-4 mt-8">
+            <button
+              onClick={handleEdit}
+              className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg"
+            >
+              編集
+            </button>
 
-          <button
-            onClick={handleTop}
-            className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg"
-          >
-            一覧に戻る
-          </button>
+            <button
+              onClick={openDeleteModal}
+              className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg"
+            >
+              削除
+            </button>
+
+            <button
+              onClick={handleTop}
+              className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg"
+            >
+              一覧に戻る
+            </button>
+          </div>
         </div>
       </div>
 
