@@ -28,12 +28,19 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     const { data: profileData, error: profileError } = await supabase
       .from('profiles')
-      .select('id, nickname')
+      .select('id, user_id, nickname')
       .eq('user_id', authData.user.id)
-      .single();
+      // 取得結果をUserProfile型にアサーション
+      .single<UserProfile>();
 
     if (profileData && !profileError) {
-      setUser(profileData);
+      // userIdのみプロパティ名を変換してセット
+      const normalizedProfile: UserProfile = {
+        id: profileData.id,
+        userId: profileData.userId, // userIdをuser_idから変換
+        nickname: profileData.nickname,
+      }
+      setUser(normalizedProfile);
     } else {
       setUser(null);
     }

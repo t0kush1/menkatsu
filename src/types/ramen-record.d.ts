@@ -3,6 +3,9 @@
  */
 export type ShortRamenRecord = {
   id: number;
+  profiles: {
+    nickname: string | null;
+  };
   shopName: string;
   visitDate: string;
   rating: number; // 1~5
@@ -15,6 +18,10 @@ export type ShortRamenRecord = {
  */
 export type FullRamenRecord = {
   id: number;
+  userId?: string;
+  profiles?: {
+    nickname: string | null;
+  };
   shopName: string;
   visitDate: string;
   ramenType: string;
@@ -32,6 +39,10 @@ export type FullRamenRecord = {
  */
 export type FullRamenPostDB = {
   id: number;
+  user_id: string;
+  profiles: {
+    nickname: string | null;
+  };
   shop_name: string;
   visit_date: string;
   ramen_type: string;
@@ -49,6 +60,9 @@ export type FullRamenPostDB = {
  */
 export type ShortRamenPostDB = {
   id: number;
+  profiles: {
+    nickname: string | null;
+  };
   shop_name: string;
   visit_date: string;
   overall_rating: number;
