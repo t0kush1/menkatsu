@@ -18,8 +18,8 @@ export type ShortRamenRecord = {
  */
 export type FullRamenRecord = {
   id: number;
-  userId: string | null;
-  profiles: {
+  userId?: string;
+  profiles?: {
     nickname: string | null;
   };
   shopName: string;
