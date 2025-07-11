@@ -18,6 +18,8 @@ export default function RamenCard({ record }: RamenRecordProps) {
     >
       <Link href={`/posts/${record.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
         <h3 className="text-2xl font-bold text-gray-700">{record.shopName}</h3>
+        {/* 投稿者 */}
+        <p className="mt-2 text-sm text-gray-500 font-semibold">投稿者： {record.profiles?.nickname}さん</p>
         {/* 画像 */}
         {record.imageUrl && (
           <div className="mt-6 pt-4 border-t text-sm text-gray-700">

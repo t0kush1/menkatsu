@@ -2,6 +2,7 @@
 
 import Layout from '@/components/Layout';
 import { StarRatingView } from '@/components/StarRatingView';
+import { useUser } from '@/contexts/UserContext';
 import { withAuth } from '@/hoc/withAuth';
 import { supabase } from '@/lib/supabase';
 import { FullRamenRecord, FullRamenPostDB } from '@/types/ramen-record';
@@ -12,6 +13,8 @@ import { toast } from 'react-toastify';
 function camelCaseRecord(recordFromDB: FullRamenPostDB): FullRamenRecord {
   return {
     id: recordFromDB.id,
+    userId: recordFromDB.user_id,
+    profiles: recordFromDB.profiles,
     shopName: recordFromDB.shop_name,
     visitDate: recordFromDB.visit_date,
     ramenType: recordFromDB.ramen_type,
@@ -27,6 +30,7 @@ function camelCaseRecord(recordFromDB: FullRamenPostDB): FullRamenRecord {
 
 export const PostDetail = () => {
   const router = useRouter();
+  const {user} = useUser();
   const { id } = router.query;
   const [record, setRecord] = useState<FullRamenRecord | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -41,7 +45,14 @@ export const PostDetail = () => {
     const fetchData = async () => {
       const { data, error } = await supabase
         .from('ramen_posts')
-        .select('*')
+        .select(
+          `
+          *,
+          profiles(
+            nickname
+          )
+        `,
+        )
         .eq('id', id)
         .single<FullRamenPostDB>();
 
@@ -113,6 +124,11 @@ export const PostDetail = () => {
             </div>
 
             <div>
+              <dt className="text-lg font-medium text-gray-600">投稿者</dt>
+              <dd className="ml-4 mt-2">{record.profiles?.nickname} さん</dd>
+            </div>
+
+            <div>
               <dt className="text-lg font-medium text-gray-600">種類</dt>
               <dd className="ml-4 mt-2">{record.ramenType}</dd>
             </div>
@@ -172,20 +188,22 @@ export const PostDetail = () => {
           )}
 
           <div className="flex justify-center gap-4 mt-8">
-            <button
-              onClick={handleEdit}
-              className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg"
-            >
-              編集
-            </button>
-
-            <button
-              onClick={openDeleteModal}
-              className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg"
-            >
-              削除
-            </button>
-
+            {record.userId === user?.userId && (
+              <>
+                <button
+                  onClick={handleEdit}
+                  className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg"
+                >
+                  編集
+                </button>
+                <button
+                  onClick={openDeleteModal}
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg"
+                >
+                  削除
+                </button>
+              </>
+            )}
             <button
               onClick={handleTop}
               className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg"

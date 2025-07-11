@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import Layout from '@/components/Layout';
 import { withAuth } from '@/hoc/withAuth';
 import { toast } from 'react-toastify';
+import { useUser } from '@/contexts/UserContext';
 
 /**
  * @summary 本日の日付を取得する関数
@@ -54,10 +55,14 @@ export const PostPage = () => {
 
   const router = useRouter();
 
+  // ユーザ情報
+  const {user} = useUser();
+
   // 保存ボタン押下時の処理
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log({
+      userId: user?.userId,
       shopName,
       visitDate,
       ramenType: isOtherSelected ? customRamenType : ramenType,
@@ -96,7 +101,7 @@ export const PostPage = () => {
         const fileName = `${Date.now()}_${compressedFile.name}`;
 
         const { error: uploadError } = await supabase.storage
-          .from('ramen-images')  // あなたが作ったバケット名
+          .from('ramen-images')
           .upload(fileName, compressedFile);
 
         if (uploadError) {
@@ -118,7 +123,7 @@ export const PostPage = () => {
 
     const { error } = await supabase.from('ramen_posts').insert([
       {
-        user_id: '00000000-0000-0000-0000-000000000000', // ユーザ機能未開発につき仮のUUIDを使用
+        user_id: user?.userId, // ユーザ機能未開発につき仮のUUIDを使用
         shop_name: shopName,
         visit_date: visitDate,
         ramen_type: isOtherSelected ? customRamenType : ramenType,

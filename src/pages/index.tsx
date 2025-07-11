@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 function camelCaseRecord(recordFromDB: ShortRamenPostDB): ShortRamenRecord {
   return {
     id: recordFromDB.id,
+    profiles: recordFromDB.profiles,
     shopName: recordFromDB.shop_name,
     visitDate: recordFromDB.visit_date,
     rating: recordFromDB.overall_rating,
@@ -24,7 +25,16 @@ export const Home = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const { data, error } = await supabase.from('ramen_posts').select('*').order('created_at', { ascending: false });
+      const { data, error } = await supabase
+        .from('ramen_posts')
+        .select(`
+          *,
+          profiles(
+            user_id,
+            nickname
+          )
+        `)
+        .order('created_at', { ascending: false });
       if (error) {
         console.error('Error fetching posts:', error);
       } else {
