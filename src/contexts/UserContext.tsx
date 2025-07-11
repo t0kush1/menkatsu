@@ -37,7 +37,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       // userIdのみプロパティ名を変換してセット
       const normalizedProfile: UserProfile = {
         id: profileData.id,
-        userId: profileData.user_id, // userIdをuser_idから変換
+        userId: profileData.userId, // userIdをuser_idから変換
         nickname: profileData.nickname,
       }
       setUser(normalizedProfile);
