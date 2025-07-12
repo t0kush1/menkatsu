@@ -20,6 +20,7 @@ export default function SignUpPage() {
   const [passwordError, setPasswordError] = useState('');
   const router = useRouter();
 
+
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -39,27 +40,24 @@ export default function SignUpPage() {
 
     setLoading(true);
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/callback`,
+      }
     });
 
     if (error) {
       toast.error(`サインアップに失敗しました: ${error.message}`);
       console.error(error);
-    }
-
-    // 一度データを取得
-    const { data: userData, error: userError } = await supabase.auth.getUser();
-    if (userError || !userData?.user) {
-      toast.error(`ユーザ情報の取得に失敗しました: ${userError?.message}`);
-      console.error(userError);
-      setLoading(false);
-      return;
+    } else {
+      toast.warning('ユーザ登録はまだ完了していません！')
+      toast.success('確認メールを送信しました。メールを確認して、認証用リンクを押下してください。')
     }
 
     // 問題なければユーザIDの取得
-    const userId = userData.user.id;
+    const userId = data?.user?.id;
 
     // ユーザIDが取得できた場合はプロフィール作成
     if (userId) {
@@ -77,10 +75,8 @@ export default function SignUpPage() {
         console.error(error);
         setLoading(false);
         return;
-      } else {
-        toast.success('登録が成功しました！ログインしてください。');
       }
-      router.push('/login');
+      
     } else {
       setLoading(false);
       toast.error('ユーザIDの取得に失敗しました。');
