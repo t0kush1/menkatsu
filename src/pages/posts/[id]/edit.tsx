@@ -196,7 +196,7 @@ export const EditPost = () => {
         <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-md">
           {/* 店名 */}
           <div style={{ marginBottom: '1rem' }}>
-            <label className="block font-medium text-gray-600 mb-1">店名:</label>
+            <label className="block font-medium text-gray-600 mb-1">店名</label>
             <input
               type="text"
               value={shopName}
@@ -207,7 +207,7 @@ export const EditPost = () => {
             {/* 訪問日 */}
           </div>
           <div style={{ marginBottom: '1rem' }}>
-            <label className="block font-medium text-gray-600 mb-1">訪問日:</label>
+            <label className="block font-medium text-gray-600 mb-1">訪問日</label>
             <input
               type="date"
               value={visitDate}
@@ -217,7 +217,7 @@ export const EditPost = () => {
           </div>
 
           {/* 種類 */}
-          <div>
+          <div style={{ marginBottom: '1rem' }}>
             <label className="block font-medium text-gray-600 mb-1">種類</label>
             <select
               value={ramenType}
@@ -252,7 +252,7 @@ export const EditPost = () => {
           )}
 
           {/* 価格 */}
-          <div>
+          <div style={{ marginBottom: '1rem' }}>
             <label className="block font-medium text-gray-600 mb-1">価格</label>
             <input
               type="number"
@@ -265,7 +265,7 @@ export const EditPost = () => {
           </div>
 
           {/* 評価 */}
-          <div className="grid grid-cols-1 gap-4">
+          <div style={{ marginBottom: '1rem' }} className="grid grid-cols-1 gap-4">
             {[
               { label: '味', state: tasteRating, setter: setTasteRating },
               { label: 'コスパ', state: costRating, setter: setCostRating },
