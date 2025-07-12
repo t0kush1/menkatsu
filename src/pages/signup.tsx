@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 import { supabase } from '@/lib/supabase';
 import Layout from '@/components/Layout';
 import { toast } from 'react-toastify';
@@ -18,7 +17,6 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const [nicknameError, setNicknameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const router = useRouter();
 
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -76,7 +74,7 @@ export default function SignUpPage() {
         setLoading(false);
         return;
       }
-      
+
     } else {
       setLoading(false);
       toast.error('ユーザIDの取得に失敗しました。');
