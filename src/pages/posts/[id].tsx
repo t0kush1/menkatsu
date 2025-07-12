@@ -10,27 +10,9 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
-function camelCaseRecord(recordFromDB: FullRamenPostDB): FullRamenRecord {
-  return {
-    id: recordFromDB.id,
-    userId: recordFromDB.user_id,
-    profiles: recordFromDB.profiles,
-    shopName: recordFromDB.shop_name,
-    visitDate: recordFromDB.visit_date,
-    ramenType: recordFromDB.ramen_type,
-    price: recordFromDB.price,
-    tasteRating: recordFromDB.taste_rating,
-    costRating: recordFromDB.cost_rating,
-    serviceRating: recordFromDB.service_rating,
-    overallRating: recordFromDB.overall_rating,
-    comment: recordFromDB.comment,
-    imageUrl: recordFromDB.image_url,
-  };
-}
-
 export const PostDetail = () => {
   const router = useRouter();
-  const {user} = useUser();
+  const { user } = useUser();
   const { id } = router.query;
   const [record, setRecord] = useState<FullRamenRecord | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -41,13 +23,27 @@ export const PostDetail = () => {
     if (!id) {
       return;
     }
+
+    let isMounted = true; // コンポーネントのマウント状態を追跡
+
     // APIからデータを取得する処理
     const fetchData = async () => {
       const { data, error } = await supabase
         .from('ramen_posts')
         .select(
           `
-          *,
+          id,
+          user_id,
+          shop_name,
+          visit_date,
+          ramen_type,
+          price,
+          taste_rating,
+          cost_rating,
+          service_rating,
+          overall_rating,
+          comment,
+          image_url,
           profiles(
             nickname
           )
@@ -56,16 +52,24 @@ export const PostDetail = () => {
         .eq('id', id)
         .single<FullRamenPostDB>();
 
-      if (error) {
-        console.log(error);
-      } else {
-        // 取得したデータをstateにセット
-        setRecord(camelCaseRecord(data));
+      // コンポーネントがアンマウントされたときはsetしない
+      if (isMounted) {
+        if (error) {
+          console.log(error);
+        } else {
+          // 取得したデータをstateにセット
+          setRecord(camelCaseRecord(data));
+          console.log('取得したレコード:', record);
+        }
       }
     };
 
     // 呼出し
     fetchData();
+
+    return () => {
+      isMounted = false; // コンポーネントがアンマウントされたらフラグを更新
+    };
   }, [id]);
 
   if (!record) {
@@ -80,7 +84,7 @@ export const PostDetail = () => {
   // 削除確認ダイアログの表示
   const openDeleteModal = () => {
     setIsDeleteModalOpen(true);
-  }
+  };
 
   // 「削除」ボタン押下時の処理
   const handleDelete = async () => {
@@ -187,8 +191,10 @@ export const PostDetail = () => {
             </div>
           )}
 
+          {/* ボタン */}
           <div className="flex justify-center gap-4 mt-8">
             {record.userId === user?.userId && (
+              // 投稿者本人のみ編集・削除ボタンを表示
               <>
                 <button
                   onClick={handleEdit}
@@ -247,6 +253,29 @@ export const PostDetail = () => {
       )}
     </Layout>
   );
+};
+
+/**
+ * DBから取得したレコードをオブジェクト用に変換
+ * @param recordFromDB
+ * @returns FullRamenRecord
+ */
+function camelCaseRecord(recordFromDB: FullRamenPostDB): FullRamenRecord {
+  return {
+    id: recordFromDB.id,
+    userId: recordFromDB.user_id,
+    profiles: recordFromDB.profiles,
+    shopName: recordFromDB.shop_name,
+    visitDate: recordFromDB.visit_date,
+    ramenType: recordFromDB.ramen_type,
+    price: recordFromDB.price,
+    tasteRating: recordFromDB.taste_rating,
+    costRating: recordFromDB.cost_rating,
+    serviceRating: recordFromDB.service_rating,
+    overallRating: recordFromDB.overall_rating,
+    comment: recordFromDB.comment,
+    imageUrl: recordFromDB.image_url,
+  };
 }
 
 export default withAuth(PostDetail);

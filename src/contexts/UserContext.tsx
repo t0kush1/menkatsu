@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { supabase } from '@/lib/supabase';
-import { UserProfile } from '@/types/user';
+import { UserProfile, UserProfileGetDB } from '@/types/user';
 
 type userContextType = {
   user: UserProfile,
@@ -31,13 +31,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       .select('id, user_id, nickname')
       .eq('user_id', authData.user.id)
       // 取得結果をUserProfile型にアサーション
-      .single<UserProfile>();
+      .single<UserProfileGetDB>();
 
     if (profileData && !profileError) {
       // userIdのみプロパティ名を変換してセット
       const normalizedProfile: UserProfile = {
         id: profileData.id,
-        userId: profileData.userId, // userIdをuser_idから変換
+        userId: profileData.user_id,
         nickname: profileData.nickname,
       }
       setUser(normalizedProfile);
