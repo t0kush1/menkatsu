@@ -50,6 +50,7 @@ export default function SignUpPage() {
       toast.error(`サインアップに失敗しました: ${error.message}`);
       console.error(error);
     } else {
+      console.log('BASE_URL', process.env.NEXT_PUBLIC_BASE_URL);
       toast.warning('ユーザ登録はまだ完了していません！')
       toast.success('確認メールを送信しました。メールを確認して、認証用リンクを押下してください。')
     }
